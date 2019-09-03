@@ -1,3 +1,6 @@
+1.
+100th highest salary of an employee
+
 CREATE TABLE emp(  
 EmployeeID NOT NULL,  
 FirstName varchar(255) NOT NULL,  
@@ -30,3 +33,64 @@ select * from emp
 select * from (
 select e.*, Row_Number() over (partition by salary desc ) dup from emp e
 ) where dup = 100
+
+
+1. Get The Employee Name and their Manager from Below Employee Table.
+=====================================================================
+
+-- Create a Table
+CREATE TABLE Employee(
+EmployeeID INT PRIMARY KEY,
+Name NVARCHAR(50),
+ManagerID INT
+)
+
+
+INSERT INTO Employee
+SELECT 1, 'Mike', 3
+UNION ALL
+SELECT 2, 'David', 3
+UNION ALL
+SELECT 3, 'Roger', NULL
+UNION ALL
+SELECT 4, 'Marry',2
+UNION ALL
+SELECT 5, 'Joseph',2
+UNION ALL
+SELECT 7, 'Ben',2
+
+EmployeeID	Name	ManagerID
+1			Mike			3
+2			David			3
+3			Roger			null
+4			Marry			2
+5			Joseph			2
+7			Ben				2
+
+
+query 1 :select e.name as emp_name, k.name as manager_name from Employee e join Employee k on e.EmployeeID = k.ManagerID
+
+
+emp_name	manager_name
+Roger	Mike
+Roger	David
+David	Marry
+David	Joseph
+David	Ben
+
+Query 2:
+SELECT Emp_name AS Employee_Name,(SELECT Emp_name FROM  Employee  where
+Emp_id = Manager_id ) AS Manager_Name  FROM   Employee 
+
+
+3.
+Get employees who are managers 
+
+select e.EmployeeID, k.name as manager_name from Employee e join Employee k on e.EmployeeID = k.ManagerID
+
+EmployeeID	manager_name
+3	Mike
+3	David
+2	Marry
+2	Joseph
+2	Ben
